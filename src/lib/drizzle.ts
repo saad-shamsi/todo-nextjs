@@ -3,7 +3,6 @@ import { sql } from "@vercel/postgres";
 
 import { drizzle } from "drizzle-orm/vercel-postgres";
 
-// Types
 import { InferModel } from "drizzle-orm";
 
 export const todoTable = pgTable("todos", {

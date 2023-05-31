@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
-import { Todo, todoTable, NewTodo, db } from "../../../lib/drizzle";
+import { Todo, todoTable, NewTodo, db } from "@/src/lib/drizzle";
 export async function GET(request: NextRequest) {
   try {
     await sql`CREATE TABLE IF NOT EXISTS Todos (id SERIAL, Todos VARCHAR(255));`;
@@ -19,14 +19,17 @@ export async function POST(request: NextRequest) {
   const req = await request.json();
   try {
     if (req.task) {
-      const res = db
+      const res = await db
         .insert(todoTable)
         .values({
           task: req.task,
         })
         .returning();
       console.log(res);
-      return NextResponse.json({ message: "Task added successfully" });
+      return NextResponse.json({
+        message: "Task added successfully",
+        data: res,
+      });
     } else {
       throw new Error("task field is required");
     }
